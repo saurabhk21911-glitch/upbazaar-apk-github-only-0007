@@ -19,27 +19,17 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
-      - name: Install packages
-        run: npm install
-
-      - name: Create babel config if missing
+      - name: Install EAS and deps
         run: |
-          if [ ! -f babel.config.js ]; then
-            echo "module.exports = function(api) { api.cache(true); return { presets: ['babel-preset-expo'] }; };" > babel.config.js
-          fi
-          cat babel.config.js
+          npm install
+          npm install -g eas-cli
 
-      - name: Prebuild Android
-        run: npx expo prebuild --platform android --clean
-
-      - name: Build APK
+      - name: Build APK with EAS Local
         run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          eas build --platform android --profile preview --local --non-interactive --output ${{ github.workspace }}/UpBazaar.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: UpBazaar-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: UpBazaar.apk
