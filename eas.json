@@ -1,0 +1,3 @@
+{
+  "build": { "preview": { "distribution": "internal", "android": { "buildType": "apk" } } }
+}
