@@ -4,7 +4,8 @@
     "slug": "upbazaar",
     "version": "1.0.0",
     "android": {
-      "package": "com.upbazaar.app"
+      "package": "com.upbazaar.app",
+      "permissions": ["ACCESS_FINE_LOCATION","ACCESS_COARSE_LOCATION","CAMERA","READ_EXTERNAL_STORAGE"]
     }
   }
 }
