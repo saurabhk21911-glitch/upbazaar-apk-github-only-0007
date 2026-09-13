@@ -19,17 +19,20 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
-      - name: Install EAS and deps
-        run: |
-          npm install
-          npm install -g eas-cli
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build APK with EAS Local
+      - name: Prebuild Android
+        run: npx expo prebuild --platform android --clean --no-install
+
+      - name: Build APK
         run: |
-          eas build --platform android --profile preview --local --non-interactive --output ${{ github.workspace }}/UpBazaar.apk
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: UpBazaar-APK
-          path: UpBazaar.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
