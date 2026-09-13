@@ -1,0 +1,14 @@
+{
+  "name": "upbazaar",
+  "version": "2.0.0",
+  "main": "App.js",
+  "dependencies": {
+    "expo": "~52.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.1",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "expo-image-picker": "~16.0.3",
+    "expo-location": "~18.0.4",
+    "@expo/vector-icons": "^14.0.2"
+  }
+}
