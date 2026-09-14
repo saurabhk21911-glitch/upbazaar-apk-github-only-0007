@@ -13,16 +13,31 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
+
       - run: npm install
       - run: npx expo prebuild --clean --platform android --no-install
-      - name: Downgrade Gradle
+
+      - name: Fix Gradle and Toolchain clash
         run: |
           sed -i "s/gradle-8.*/gradle-7.6-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
           sed -i "s/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:7.4.2'/" android/build.gradle
-      - run: |
+          # Ye 3 line hi asli dikkat hai - inko delete kar rahe hai
+          sed -i "/toolchain/d" android/build.gradle
+          sed -i "/languageVersion/d" android/build.gradle
+          sed -i "/JavaLanguageVersion/d" android/build.gradle
+          sed -i "/sourceCompatibility/d" android/build.gradle
+          sed -i "/targetCompatibility/d" android/build.gradle
+          sed -i "/toolchain/d" android/app/build.gradle
+          sed -i "/languageVersion/d" android/app/build.gradle
+          sed -i "/JavaLanguageVersion/d" android/app/build.gradle
+          echo "Fixed files"
+
+      - name: Build Debug APK
+        run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
+
       - uses: actions/upload-artifact@v4
         with:
           name: upbazaar-debug-apk
