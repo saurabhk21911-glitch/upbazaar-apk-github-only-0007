@@ -1,8 +1,7 @@
 {
   "expo": {
     "name": "upbazaar",
-    "slug": "upbazaar",
-    "owner": "indravasagroup7405-team",
+    "slug": "upbazaar-apk",
     "version": "1.0.0",
     "orientation": "portrait",
     "platforms": ["android"],
