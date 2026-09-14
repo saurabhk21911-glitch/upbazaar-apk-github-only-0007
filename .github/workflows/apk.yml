@@ -13,31 +13,42 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-
       - run: npm install
       - run: npx expo prebuild --clean --platform android --no-install
 
-      - name: Fix Gradle and Toolchain clash
+      - name: Fix - Overwrite Build Gradle
         run: |
           sed -i "s/gradle-8.*/gradle-7.6-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
-          sed -i "s/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:7.4.2'/" android/build.gradle
-          # Ye 3 line hi asli dikkat hai - inko delete kar rahe hai
-          sed -i "/toolchain/d" android/build.gradle
-          sed -i "/languageVersion/d" android/build.gradle
-          sed -i "/JavaLanguageVersion/d" android/build.gradle
-          sed -i "/sourceCompatibility/d" android/build.gradle
-          sed -i "/targetCompatibility/d" android/build.gradle
-          sed -i "/toolchain/d" android/app/build.gradle
-          sed -i "/languageVersion/d" android/app/build.gradle
-          sed -i "/JavaLanguageVersion/d" android/app/build.gradle
-          echo "Fixed files"
+          
+          cat > android/build.gradle << 'EOF'
+          buildscript {
+            ext {
+              buildToolsVersion = "33.0.0"
+              minSdkVersion = 21
+              compileSdkVersion = 33
+              targetSdkVersion = 33
+              ndkVersion = "23.1.7779620"
+              kotlinVersion = "1.8.0"
+            }
+            dependencies {
+              classpath('com.android.tools.build:gradle:7.4.2')
+              classpath('com.facebook.react:react-native-gradle-plugin')
+              classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+            }
+          }
+          allprojects {
+            repositories {
+              google()
+              mavenCentral()
+            }
+          }
+          EOF
+          cat android/build.gradle
 
-      - name: Build Debug APK
-        run: |
+      - run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
-
       - uses: actions/upload-artifact@v4
         with:
           name: upbazaar-debug-apk
