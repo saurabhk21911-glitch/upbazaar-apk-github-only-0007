@@ -12,38 +12,34 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
       - run: npm install
       - run: npx expo prebuild --clean --platform android --no-install
 
-      - name: Fix - Overwrite Build Gradle
+      - name: Fix ALL Gradle Files - Nuclear Option
         run: |
-          sed -i "s/gradle-8.*/gradle-7.6-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
+          # Gradle 8.6 use karenge Java 17 ke saath
+          sed -i "s/gradle-8.*/gradle-8.6-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
           
-          cat > android/build.gradle << 'EOF'
-          buildscript {
-            ext {
-              buildToolsVersion = "33.0.0"
-              minSdkVersion = 21
-              compileSdkVersion = 33
-              targetSdkVersion = 33
-              ndkVersion = "23.1.7779620"
-              kotlinVersion = "1.8.0"
-            }
-            dependencies {
-              classpath('com.android.tools.build:gradle:7.4.2')
-              classpath('com.facebook.react:react-native-gradle-plugin')
-              classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
-            }
-          }
-          allprojects {
-            repositories {
-              google()
-              mavenCentral()
-            }
-          }
-          EOF
-          cat android/build.gradle
+          # Saare gradle files se toolchain aur compatibility ka jhagda hatao
+          echo "Cleaning app/build.gradle..."
+          sed -i '/toolchain/d' android/app/build.gradle
+          sed -i '/languageVersion/d' android/app/build.gradle
+          sed -i '/sourceCompatibility/d' android/app/build.gradle
+          sed -i '/targetCompatibility/d' android/app/build.gradle
+          sed -i '/java {/d' android/app/build.gradle
+          sed -i '/jvmToolchain/d' android/app/build.gradle
+          
+          echo "Cleaning settings.gradle..."
+          sed -i '/toolchain/d' android/settings.gradle
+          sed -i '/languageVersion/d' android/settings.gradle
+          
+          echo "Cleaning build.gradle..."
+          sed -i '/toolchain/d' android/build.gradle
+          sed -i '/languageVersion/d' android/build.gradle
+          sed -i '/sourceCompatibility/d' android/build.gradle
+          sed -i '/targetCompatibility/d' android/build.gradle
+          sed -i '/java {/d' android/build.gradle
 
       - run: |
           cd android
