@@ -1,31 +1,23 @@
 {
   "expo": {
     "name": "UpBazaar",
-    "slug": "upbazaar-apk-github-only-0007",
+    "slug": "upbazaar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "upbazaar",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
+      "package": "com.upbazaar.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.upbazaar.app"
+      }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "platforms": ["android"]
   }
 }
