@@ -14,7 +14,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - run: npm install
+      - run: npx jetify || true
       - run: npx expo prebuild --clean --platform android --no-install
+      - name: Fix Gradle version
+        run: |
+          sed -i "s/gradle-8.*/gradle-8.0-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
+          cat android/gradle/wrapper/gradle-wrapper.properties
       - name: Build Debug APK
         run: |
           cd android
