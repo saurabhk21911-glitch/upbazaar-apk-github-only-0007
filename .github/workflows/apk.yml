@@ -13,19 +13,27 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - run: npm install
-      - run: npx jetify || true
-      - run: npx expo prebuild --clean --platform android --no-install
-      - name: Fix Gradle version
+
+      - name: Install deps
+        run: npm install
+
+      - name: Prebuild Android
+        run: npx expo prebuild --clean --platform android --no-install
+
+      - name: Downgrade Gradle for old Expo
         run: |
-          sed -i "s/gradle-8.*/gradle-8.0-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
+          sed -i "s/gradle-8.*/gradle-7.6-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
+          sed -i "s/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:7.4.2'/" android/build.gradle
           cat android/gradle/wrapper/gradle-wrapper.properties
+          cat android/build.gradle | grep gradle
+
       - name: Build Debug APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
+
       - uses: actions/upload-artifact@v4
         with:
-          name: upbazaar-apk
+          name: upbazaar-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
