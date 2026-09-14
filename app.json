@@ -1,12 +1,22 @@
 {
   "expo": {
-    "name": "UpBazaar",
+    "name": "upbazaar",
     "slug": "upbazaar",
+    "owner": "indravasagroup7740s-team",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "platforms": ["android"],
     "android": {
-      "package": "com.upbazaar.app"
+      "package": "com.indravasagroup.upbazaar",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e5f7a1b2-c3d4-4e5f-a6b7-c8d9e0f1a2b3"
+      }
     }
   }
 }
