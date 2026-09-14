@@ -1,16 +1,17 @@
 {
   "expo": {
     "name": "upbazaar",
-    "slug": "upbazaar-apk",
+    "slug": "upbazaar",
     "owner": "indravasagroup7405-team",
     "version": "1.0.0",
     "orientation": "portrait",
     "platforms": ["android"],
     "android": {
-      "package": "com.indravasagroup.upbazaar",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+      "package": "com.indravasagroup.upbazaar"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "39d4ce46-57d5-4698-9d34-1db3c78860e2"
       }
     }
   }
