@@ -16,30 +16,95 @@ jobs:
       - run: npm install
       - run: npx expo prebuild --clean --platform android --no-install
 
-      - name: Fix ALL Gradle Files - Nuclear Option
+      - name: FINAL FIX - No Laptop Needed
         run: |
-          # Gradle 8.6 use karenge Java 17 ke saath
-          sed -i "s/gradle-8.*/gradle-8.6-all.zip/" android/gradle/wrapper/gradle-wrapper.properties
+          echo "gradle-8.6" 
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-all.zip" > android/gradle/wrapper/gradle-wrapper.properties
           
-          # Saare gradle files se toolchain aur compatibility ka jhagda hatao
-          echo "Cleaning app/build.gradle..."
-          sed -i '/toolchain/d' android/app/build.gradle
-          sed -i '/languageVersion/d' android/app/build.gradle
-          sed -i '/sourceCompatibility/d' android/app/build.gradle
-          sed -i '/targetCompatibility/d' android/app/build.gradle
-          sed -i '/java {/d' android/app/build.gradle
-          sed -i '/jvmToolchain/d' android/app/build.gradle
+          cat > android/build.gradle << 'EOF'
+          buildscript {
+            ext {
+              buildToolsVersion = "34.0.0"
+              minSdkVersion = 23
+              compileSdkVersion = 34
+              targetSdkVersion = 34
+              ndkVersion = "26.1.10909125"
+              kotlinVersion = "1.9.22"
+            }
+            dependencies {
+              classpath('com.android.tools.build:gradle:8.3.0')
+              classpath('com.facebook.react:react-native-gradle-plugin')
+              classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+            }
+          }
+          allprojects {
+            repositories {
+              google()
+              mavenCentral()
+            }
+          }
+          EOF
           
-          echo "Cleaning settings.gradle..."
-          sed -i '/toolchain/d' android/settings.gradle
-          sed -i '/languageVersion/d' android/settings.gradle
+          cat > android/app/build.gradle << 'EOF'
+          apply plugin: "com.android.application"
+          apply plugin: "org.jetbrains.kotlin.android"
+          apply plugin: "com.facebook.react"
           
-          echo "Cleaning build.gradle..."
-          sed -i '/toolchain/d' android/build.gradle
-          sed -i '/languageVersion/d' android/build.gradle
-          sed -i '/sourceCompatibility/d' android/build.gradle
-          sed -i '/targetCompatibility/d' android/build.gradle
-          sed -i '/java {/d' android/build.gradle
+          import com.android.build.OutputFile
+          
+          react {
+            entryFile = "index.js"
+          }
+          
+          def enableProguardInReleaseBuilds = false
+          def jscFlavor = 'org.webkit:android-jsc:+'
+          
+          android {
+            ndkVersion rootProject.ext.ndkVersion
+            compileSdkVersion rootProject.ext.compileSdkVersion
+            namespace "com.upbazaar.app"
+            compileOptions {
+              sourceCompatibility JavaVersion.VERSION_17
+              targetCompatibility JavaVersion.VERSION_17
+            }
+            kotlinOptions {
+              jvmTarget = '17'
+            }
+            defaultConfig {
+              applicationId "com.upbazaar.app"
+              minSdkVersion rootProject.ext.minSdkVersion
+              targetSdkVersion rootProject.ext.targetSdkVersion
+              versionCode 1
+              versionName "1.0"
+            }
+            signingConfigs {
+              debug {
+                storeFile file('debug.keystore')
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+              }
+            }
+            buildTypes {
+              debug {
+                signingConfig signingConfigs.debug
+              }
+              release {
+                signingConfig signingConfigs.debug
+                minifyEnabled enableProguardInReleaseBuilds
+                proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+              }
+            }
+          }
+          
+          dependencies {
+            implementation fileTree(dir: "libs", include: ["*.jar"])
+            implementation "com.facebook.react:react-native:+"
+          }
+          
+          apply from: file("../../node_modules/@sentry/react-native/sentry.gradle")
+          apply from: file("../../node_modules/expo-updates/scripts/create-manifest-android.gradle")
+          EOF
 
       - run: |
           cd android
@@ -47,5 +112,5 @@ jobs:
           ./gradlew assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
-          name: upbazaar-debug-apk
+          name: upbazaar-final-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
