@@ -15,20 +15,21 @@
         {
           "android": {
             "extraMavenRepos": [],
-            "minSdkVersion": 23
+            "minSdkVersion": 23,
+            "kotlinVersion": "1.9.24"
           }
         }
       ],
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow UpBazaar to use your location."
         }
       ]
     ],
     "extra": {
       "eas": {
-        "projectId": "39d4ce46-57d5-4698-9d34-1db3c78860e2"
+        "projectId": "39d4ce46-57d5-4698-9d34-1db3c78"
       }
     }
   }
