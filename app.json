@@ -7,7 +7,8 @@
     "orientation": "portrait",
     "platforms": ["android"],
     "android": {
-      "package": "com.indravasagroup.upbazaar"
+      "package": "com.indravasagroup.upbazaar",
+      "permissions": ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"]
     },
     "plugins": [
       [
@@ -29,8 +30,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "39d4ce46-57d5-4698-9d34-1db3c78"
+        "projectId": "394ce6a-57d5-4698-963a-1dbc788d6e2"
       }
-    }
+    },
+    "sdkVersion": "52.0.0"
   }
 }
