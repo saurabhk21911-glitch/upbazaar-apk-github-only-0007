@@ -9,15 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~51.0.28",
-    "expo-asset": "~10.0.10",
-    "expo-constants": "~16.0.2",
-    "expo-image-picker": "~16.0.6",
-    "expo-location": "~18.0.10",
-    "expo-status-bar": "~1.12.1",
-    "expo-build-properties": "~0.12.5",
-    "react": "18.2.0",
-    "react-native": "0.74.5",
+    "expo": "~52.0.28",
+    "expo-asset": "~11.0.3",
+    "expo-constants": "~17.0.5",
+    "expo-image-picker": "~16.7.4",
+    "expo-location": "~18.0.9",
+    "expo-status-bar": "~2.2.2",
+    "expo-build-properties": "~0.13.2",
+    "react": "18.3.1",
+    "react-native": "0.76.7",
     "@react-native-async-storage/async-storage": "1.23.1"
   },
   "devDependencies": {
