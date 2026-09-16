@@ -28,11 +28,6 @@
         }
       ]
     ],
-    "extra": {
-      "eas": {
-        "projectId": "394ce6a-57d5-4698-963a-1dbc788d6e2"
-      }
-    },
     "sdkVersion": "52.0.0"
   }
 }
