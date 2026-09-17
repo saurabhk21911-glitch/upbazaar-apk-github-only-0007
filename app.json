@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "UpBazaar",
+    "owner":"upbazaar-apk",
     "slug": "upbazaar-apk",
     "icon": "./assets/icon.png",
 
