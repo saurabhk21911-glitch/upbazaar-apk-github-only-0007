@@ -6,7 +6,7 @@
     "start": "expo start"
   },
   "dependencies": {
-    "expo": "52.0.28",
+    "expo": "52.0.27",
     "expo-asset": "11.0.3",
     "expo-constants": "17.0.5",
     "expo-image-picker": "16.0.6",
