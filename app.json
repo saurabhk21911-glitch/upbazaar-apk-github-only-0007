@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "UpBazaar",
-    "slug": "upbazaar-apk",
-    "owner":"upbazaar-apk"
+    "slug": "upbazaar-ready",
+    "owner":"saurabh21911s-team"
     "version": "1.0.0",
     "orientation": "portrait",
 
@@ -42,7 +42,7 @@
 
     "extra": {
       "eas": {
-        "projectId": "39d4ce46-57d5-4698-9d34-1db3c78860e2"
+        "projectId": "9911ec7e-908d-4e6a-a100-bf9177e526aa"
       }
     }
   }
