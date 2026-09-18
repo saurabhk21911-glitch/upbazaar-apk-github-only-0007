@@ -2,18 +2,15 @@
   "expo": {
     "name": "UpBazaar",
     "slug": "upbazaar-trending",
-    "owner":"indratelecom0007s-team",
+    "owner": "indratelecom0007s-team",
     "version": "1.0.0",
     "orientation": "portrait",
-
     "icon": "./assets/icon.png",
-
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-
     "android": {
       "package": "com.indravasagroup.upbazaar",
       "minSdkVersion": 24,
@@ -22,7 +19,6 @@
         "ACCESS_FINE_LOCATION"
       ]
     },
-
     "plugins": [
       [
         "expo-build-properties",
@@ -33,11 +29,9 @@
           }
         }
       ],
-
       "expo-location",
       "expo-image-picker"
     ],
-
     "extra": {
       "eas": {
         "projectId": "d8de40e8-587d-4c96-b45f-904a86f0d46d"
