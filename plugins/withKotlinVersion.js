@@ -1,25 +1,24 @@
 const { withProjectBuildGradle } = require("@expo/config-plugins");
 
-module.exports = function withKotlinVersion(config) {
+const withKotlinVersion = (config) => {
   return withProjectBuildGradle(config, (config) => {
-    let contents = config.modResults.contents;
+    if (config.modResults.language === "groovy") {
+      let contents = config.modResults.contents;
 
-    // Force Kotlin 1.9.24 for Expo SDK 52 / Compose Compiler 1.5.14
-    contents = contents.replace(
-      /kotlinVersion\s*=\s*findProperty\(['"]android\.kotlinVersion['"]\)\s*\?:\s*['"][^'"]+['"]/g,
-      'kotlinVersion = "1.9.24"'
-    );
+      contents = contents.replace(
+        /kotlinVersion\s*=\s*["'][^"']+["']/g,
+        'kotlinVersion = "1.9.24"'
+      );
 
-    contents = contents.replace(
-      /kotlinVersion\s*=\s*['"][^'"]+['"]/g,
-      'kotlinVersion = "1.9.24"'
-    );
+      if (!contents.includes('kotlinVersion = "1.9.24"')) {
+        contents = `ext.kotlinVersion = "1.9.24"\n${contents}`;
+      }
 
-    contents = contents.replace(
-      /kotlin_version\s*=\s*['"][^'"]+['"]/g,
-      'kotlin_version = "1.9.24"'
-    );
+      config.modResults.contents = contents;
+    }
 
     return config;
   });
 };
+
+module.exports = withKotlinVersion;
