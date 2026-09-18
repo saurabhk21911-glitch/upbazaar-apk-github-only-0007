@@ -35,7 +35,6 @@
           }
         }
       ],
-      "./plugins/withKotlinVersion",
       "expo-location",
       "expo-image-picker"
     ],
