@@ -4,7 +4,6 @@
     "slug": "upbazaar-trending",
     "owner": "indratelecom0007s-team",
     "version": "1.0.0",
-
     "orientation": "portrait",
 
     "icon": "./assets/icon.png",
@@ -18,7 +17,6 @@
     "android": {
       "package": "com.indravasagroup.upbazaar",
       "versionCode": 1,
-
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"
@@ -35,13 +33,14 @@
           }
         }
       ],
+      "./plugins/withKotlinVersion",
       "expo-location",
       "expo-image-picker"
     ],
 
     "extra": {
       "eas": {
-        "projectId": "d8de40e8-587d-4c96-b45f-904a86f0d46d"
+        "projectId": "d8de40e8-587d-4c96-b45f-"
       }
     }
   }
