@@ -36,7 +36,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "YOUR_CURRENT_PROJECT_ID"
+        "projectId": "d8de40e8-587d-4c96-b45f-904a86f0d46d"
       }
     },
     "sdkVersion": "52.0.0",
