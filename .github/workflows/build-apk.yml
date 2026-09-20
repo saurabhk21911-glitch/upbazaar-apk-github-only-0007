@@ -11,48 +11,98 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Node.js 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3. Java 17
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
+      # 4. Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # 5. Diagnose Expo configuration
       - name: Check Expo configuration
-        run: npx expo config --type public
+        run: |
+          echo "=============================="
+          echo "EXPO CONFIG"
+          echo "=============================="
 
+          npx expo config --type public > expo-config.json
+
+          echo "=== RESOLVED SDK VERSION ==="
+          grep -n '"sdkVersion"' expo-config.json || true
+
+          echo "=== EXPO PACKAGE VERSION ==="
+          node -p "require('./node_modules/expo/package.json').version"
+
+          echo "=== EXPO CLI VERSION ==="
+          node -p "require('./node_modules/@expo/cli/package.json').version" || npx expo --version
+
+          echo "=== NODE VERSION ==="
+          node --version
+
+          echo "=== NPM VERSION ==="
+          npm --version
+
+          echo "=== SEARCH sdkVersion IN PROJECT ==="
+          grep -RIn \
+            --exclude-dir=node_modules \
+            --exclude-dir=.git \
+            '"sdkVersion"\|sdkVersion' . || true
+
+      # 6. Generate Android project
       - name: Generate Android project
         run: |
-         CI=1 npx expo prebuild --platform android --clean 
+          echo "Removing old Android folder..."
+          rm -rf android
 
+          echo "Generating Android project..."
+          CI=1 npx expo prebuild --platform android --clean
+
+      # 7. Verify Android project
       - name: Check Android project
         run: |
-          echo "Checking Android project..."
+          echo "=============================="
+          echo "ANDROID PROJECT CHECK"
+          echo "=============================="
+
           test -d android
+
           echo "Android folder exists."
+
           ls -la android
-          echo "Checking Gradle files..."
+
+          echo "=============================="
+          echo "GRADLE FILES"
+          echo "=============================="
+
           find android -maxdepth 2 -type f | sort | head -100
 
+      # 8. Setup Gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.10.2'
+          gradle-version: "8.10.2"
 
+      # 9. Build APK
       - name: Build Release APK
         working-directory: android
-        run: gradle assembleRelease --no-daemon
+        run: |
+          gradle assembleRelease --no-daemon
 
+      # 10. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
