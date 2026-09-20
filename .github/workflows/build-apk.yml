@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,23 +33,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 5. Diagnose Expo configuration
+      # 5. Check Expo configuration
       - name: Check Expo configuration
         run: |
           echo "=============================="
-          echo "EXPO CONFIG"
+          echo "EXPO CONFIGURATION"
           echo "=============================="
 
           npx expo config --type public > expo-config.json
 
-          echo "=== RESOLVED SDK VERSION ==="
+          echo "=== SDK VERSION ==="
           grep -n '"sdkVersion"' expo-config.json || true
 
-          echo "=== EXPO PACKAGE VERSION ==="
+          echo "=== EXPO VERSION ==="
           node -p "require('./node_modules/expo/package.json').version"
-
-          echo "=== EXPO CLI VERSION ==="
-          node -p "require('./node_modules/@expo/cli/package.json').version" || npx expo --version
 
           echo "=== NODE VERSION ==="
           node --version
@@ -56,22 +54,25 @@ jobs:
           echo "=== NPM VERSION ==="
           npm --version
 
-          echo "=== SEARCH sdkVersion IN PROJECT ==="
-          grep -RIn \
-            --exclude-dir=node_modules \
-            --exclude-dir=.git \
-            '"sdkVersion"\|sdkVersion' . || true
-
       # 6. Generate Android project
       - name: Generate Android project
         run: |
-          echo "Removing old Android folder..."
+          echo "=============================="
+          echo "GENERATING ANDROID PROJECT"
+          echo "=============================="
+
           rm -rf android
 
-          echo "Generating Android project..."
+          echo "Installing npm 10.8.2..."
+          npm install -g npm@10.8.2
+
+          echo "NPM VERSION AFTER UPDATE:"
+          npm --version
+
+          echo "Running Expo prebuild..."
           CI=1 npx expo prebuild --platform android --clean
 
-      # 7. Verify Android project
+      # 7. Check Android project
       - name: Check Android project
         run: |
           echo "=============================="
@@ -96,7 +97,7 @@ jobs:
         with:
           gradle-version: "8.10.2"
 
-      # 9. Build APK
+      # 9. Build Release APK
       - name: Build Release APK
         working-directory: android
         run: |
