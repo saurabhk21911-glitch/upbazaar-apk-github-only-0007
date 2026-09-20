@@ -33,42 +33,25 @@ jobs:
 
       - name: Generate Android project
         run: |
-          echo "=== Starting Expo prebuild ==="
           npx expo prebuild --platform android --clean --non-interactive
-          echo "=== Expo prebuild finished ==="
 
       - name: Check Android project
         run: |
-          echo "=== CURRENT DIRECTORY ==="
-          pwd
+          echo "Checking Android project..."
+          test -d android
+          echo "Android folder exists."
+          ls -la android
+          echo "Checking Gradle files..."
+          find android -maxdepth 2 -type f | sort | head -100
 
-          echo "=== ROOT FILES ==="
-          ls -la
-
-          echo "=== ANDROID DIRECTORY ==="
-          if [ -d android ]; then
-            echo "android folder EXISTS"
-            ls -la android
-          else
-            echo "android folder DOES NOT EXIST"
-          fi
-
-          echo "=== GRADLE WRAPPER ==="
-          if [ -f android/gradlew ]; then
-            echo "android/gradlew EXISTS"
-            ls -l android/gradlew
-          else
-            echo "android/gradlew DOES NOT EXIST"
-          fi
-
-      - name: Make Gradle executable
-        run: |
-          chmod +x android/gradlew
-          ls -l android/gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.10.2'
 
       - name: Build Release APK
         working-directory: android
-        run: ./gradlew assembleRelease --no-daemon
+        run: gradle assembleRelease --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
