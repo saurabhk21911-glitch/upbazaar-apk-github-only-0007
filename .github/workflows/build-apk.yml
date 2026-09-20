@@ -33,7 +33,7 @@ jobs:
 
       - name: Generate Android project
         run: |
-          npx expo prebuild --platform android --clean --non-interactive
+         CI=1 npx expo prebuild --platform android --clean 
 
       - name: Check Android project
         run: |
