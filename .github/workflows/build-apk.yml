@@ -2,6 +2,9 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -28,15 +31,15 @@ jobs:
       - name: Check Expo configuration
         run: npx expo config --type public
 
-       - name: Generate Android project
+      - name: Generate Android project
+        run: npx expo prebuild --platform android --clean --non-interactive
+
+      - name: Check Android project
         run: |
-          echo "Running Expo prebuild..."
-          npx expo prebuild --platform android --clean --non-interactive
-          echo "Prebuild finished."
-          echo "Checking generated files..."
+          echo "Checking Android project..."
           test -d android
           test -f android/gradlew
-          ls -la android
+          echo "Android project generated successfully."
 
       - name: Make Gradle executable
         run: chmod +x android/gradlew
