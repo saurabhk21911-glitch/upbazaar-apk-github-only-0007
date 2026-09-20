@@ -28,18 +28,15 @@ jobs:
       - name: Check Expo configuration
         run: npx expo config --type public
 
-      - name: Generate Android project
-        run: npx expo prebuild --platform android --non-interactive --clean
-
-      - name: Verify Android project
+       - name: Generate Android project
         run: |
-          echo "Checking Android folder..."
-          ls -la
-          echo "Checking android folder..."
-          ls -la android
-          echo "Checking Gradle wrapper..."
-          ls -la android/gradlew
+          echo "Running Expo prebuild..."
+          npx expo prebuild --platform android --clean --non-interactive
+          echo "Prebuild finished."
+          echo "Checking generated files..."
+          test -d android
           test -f android/gradlew
+          ls -la android
 
       - name: Make Gradle executable
         run: chmod +x android/gradlew
